@@ -307,6 +307,28 @@
   .copy-value:hover{border-color:var(--seal);}
   .copy-value.copied{background:var(--leaf);border-color:var(--leaf);}
   .copy-value.copied::after{content:" (copied)";font-weight:700;}
+
+  /* ---------- tickable checklists ----------
+     The drawn ::before square is swapped for a real checkbox once JS upgrades the
+     list, so with JS off the list still reads exactly as it did before. */
+  .check-list li.cl-item{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .check-list li.cl-item::before{display:none;}
+  .cl-box{position:absolute;left:0;top:1px;width:15px;height:15px;margin:0;padding:0;appearance:none;-webkit-appearance:none;border:1.5px solid var(--seal);border-radius:3px;background:transparent;cursor:pointer;transition:background-color .15s ease, border-color .15s ease;}
+  .check-list.compact .cl-box{width:13px;height:13px;top:1px;}
+  .cl-box:checked{border-color:var(--leaf);background-color:var(--leaf);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.2 4.7 9 10 3.2' fill='none' stroke='%23163229' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:76%;}
+  .cl-box:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .check-list li.cl-done{color:rgba(78,95,82,0.5);text-decoration:line-through;text-decoration-color:rgba(78,95,82,0.35);}
+  .check-list li.cl-done strong{color:rgba(36,53,43,0.5);}
+  .check-list li.cl-done a{color:rgba(169,58,44,0.55);}
+
+  .predep-count{margin-left:auto;padding-left:6px;font-family:var(--font-mono);font-style:normal;font-size:9.5px;letter-spacing:.03em;color:var(--cream-dim);opacity:.8;}
+  .predep-tab-active .predep-count{color:var(--muted-ink);opacity:1;}
+  .predep-tab.predep-complete .predep-count{color:var(--leaf);opacity:1;}
+
+  .cl-reset-row{margin-top:12px;text-align:right;}
+  .cl-reset{padding:3px 0;background:none;border:0;border-bottom:1px dotted var(--cream-dim);color:var(--cream-dim);font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;}
+  .cl-reset:hover{color:var(--gold);border-color:var(--gold);}
+  .cl-reset.armed{color:var(--sunset);border-color:var(--sunset);}
   @media (max-width:640px){ .check-list{columns:1;} .predep-tab{min-width:calc(50% - 3px);} }
 
   /* ---------- section tab bar ----------
@@ -488,7 +510,7 @@
       <div class="big-stamp"><span>New rule<br>April 2026</span><strong>SGN</strong></div>
       <h3>Vietnam Digital Arrival Card, required</h3>
       <p>Every foreign passport holder into SGN needs this since Apr 15, 2026, separate from your visa exemption. Submission window is 72 hrs before arrival, so from Mon Aug 31 for your 4:35 AM Sep 3 landing.</p>
-      <ul class="check-list compact">
+      <ul class="check-list compact" data-cl="vn-dac">
         <li>Submit at <a href="https://prearrival.immigration.gov.vn" target="_blank" rel="noopener">prearrival.immigration.gov.vn</a>, free, official only</li>
         <li>Have ready: passport, flight VJ859, address (18A/6 Nguyen Thi Minh Khai, P. Da Kao, Q.1)</li>
         <li>Screenshot the QR code before leaving for the airport, wifi there is unreliable</li>
@@ -500,7 +522,7 @@
       <div class="big-stamp"><span>Both legs<br>required</span><strong>PH</strong></div>
       <h3>Philippines eTravel Pass, twice</h3>
       <p>Required for Filipino citizens departing and returning, free at <a href="https://etravel.gov.ph" target="_blank" rel="noopener">etravel.gov.ph</a>, includes a short health declaration, under 10 min each time.</p>
-      <ul class="check-list compact">
+      <ul class="check-list compact" data-cl="ph-etravel">
         <li>Register within 72 hrs of your Sep 3 departure, so from around Aug 31</li>
         <li>Register again within 72 hrs of your Sep 6 return, do it while you're still in Saigon</li>
       </ul>
@@ -517,7 +539,7 @@
         <h3>Airport to the Airbnb</h3>
       </div>
       <p>Two Urban Resort locations exist, always confirm the exact address, not just "Urban Resort." The unit is in the alley, right-hand side.</p>
-      <ul class="check-list compact">
+      <ul class="check-list compact" data-cl="host-pin">
         <li><a href="https://maps.app.goo.gl/3vpVDUQJ3PNvHirU9" target="_blank" rel="noopener">Open the host's Google Maps pin</a> to navigate straight there</li>
       </ul>
       <div class="copy-box">
@@ -530,7 +552,7 @@
         <div>
           <div class="checklist-heading">Taxi</div>
           <p class="host-note-fact">Vinasun or Mai Linh only, 30 to 60 min, meter fare 150k to 250k VND.</p>
-          <ul class="check-list compact">
+          <ul class="check-list compact" data-cl="taxi">
             <li>Insist the meter is on, never prepay</li>
             <li>Overcharged? Photo the plate, tell your host</li>
           </ul>
@@ -538,7 +560,7 @@
         <div>
           <div class="checklist-heading">Grab</div>
           <p class="host-note-fact">Pickup at both terminals, International is Lane B, Pillar 10.</p>
-          <ul class="check-list compact">
+          <ul class="check-list compact" data-cl="grab">
             <li>Paste the copied address above into the app</li>
           </ul>
         </div>
@@ -548,6 +570,7 @@
 
     <div class="predep-tabs" id="predepTabs"></div>
     <div id="predepCards"></div>
+    <div class="cl-reset-row"><button type="button" class="cl-reset" id="clReset" hidden>Clear all checkmarks</button></div>
   </div>
 
   <div class="section-head reveal" style="padding-top:26px;">
@@ -998,7 +1021,7 @@ predepData.forEach((c,i)=>{
   const card = document.createElement('div');
   card.className = 'predep-card' + (i===0 ? ' active' : '');
   card.id = 'predep-' + c.id;
-  card.innerHTML = `<ul class="check-list">${c.items.map(t=>`<li>${t}</li>`).join('')}</ul>`;
+  card.innerHTML = `<ul class="check-list" data-cl="${c.id}">${c.items.map(t=>`<li>${t}</li>`).join('')}</ul>`;
   predepCardsEl.appendChild(card);
 });
 function selectPredep(id){
@@ -1008,6 +1031,120 @@ function selectPredep(id){
     else { c.classList.remove('active'); }
   });
 }
+
+/* ============ TICKABLE CHECKLISTS ============
+   Every .check-list on the page becomes real checkboxes, remembered in this
+   browser via localStorage. Runs after the pre-departure cards are built. */
+(function(){
+  const STORE = 'sgn-checklist-v1';
+  let state = {};
+  try{ state = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; }
+  catch(err){ state = {}; }   /* private mode / storage off: works, just won't persist */
+  function save(){
+    try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(err){}
+  }
+
+  /* Key on the item's own wording rather than its position, so reordering or
+     inserting items keeps every other tick. Reword an item and only that one
+     resets, which is the safe direction to fail. */
+  function hash(s){
+    let h = 5381;
+    for(let i=0; i<s.length; i++){ h = ((h<<5) + h + s.charCodeAt(i)) | 0; }
+    return (h>>>0).toString(36);
+  }
+
+  function upgrade(list){
+    const scope = list.dataset.cl || 'x';
+    list.querySelectorAll('li').forEach(li=>{
+      if(li.querySelector('.cl-box')) return;
+      const key = scope + ':' + hash(li.textContent.trim());
+      const box = document.createElement('input');
+      box.type = 'checkbox';
+      box.className = 'cl-box';
+      box.checked = !!state[key];
+      box.setAttribute('aria-label', li.textContent.trim());
+      li.dataset.k = key;
+      li.classList.add('cl-item');
+      li.classList.toggle('cl-done', box.checked);
+      li.insertBefore(box, li.firstChild);
+    });
+  }
+
+  function setItem(li, on){
+    li.classList.toggle('cl-done', on);
+    if(on) state[li.dataset.k] = 1; else delete state[li.dataset.k];
+    save();
+    refresh();
+  }
+
+  function refresh(){
+    /* Per-tab progress, so you can see what is left without opening each tab. */
+    if(typeof predepData !== 'undefined'){
+      predepData.forEach(c=>{
+        const card = document.getElementById('predep-' + c.id);
+        const tab = document.querySelector('.predep-tab[data-predep="' + c.id + '"]');
+        if(!card || !tab) return;
+        const total = card.querySelectorAll('.cl-box').length;
+        const done = card.querySelectorAll('.cl-box:checked').length;
+        let el = tab.querySelector('.predep-count');
+        if(!el){ el = document.createElement('em'); el.className = 'predep-count'; tab.appendChild(el); }
+        el.textContent = done + '/' + total;
+        tab.classList.toggle('predep-complete', total > 0 && done === total);
+      });
+    }
+    const reset = document.getElementById('clReset');
+    if(reset){
+      const any = document.querySelectorAll('.cl-box:checked').length > 0;
+      reset.hidden = !any;
+      if(!any) disarm();
+    }
+  }
+
+  document.querySelectorAll('.check-list').forEach(upgrade);
+
+  /* Delegated, so it covers lists in every tab at once. */
+  document.addEventListener('click', e=>{
+    const li = e.target.closest && e.target.closest('li.cl-item');
+    if(!li) return;
+    if(e.target.closest('a')) return;                   /* links stay links */
+    const box = li.querySelector('.cl-box');
+    if(!box) return;
+    if(e.target !== box) box.checked = !box.checked;    /* the box toggles itself */
+    setItem(li, box.checked);
+  });
+  /* Keyboard toggling fires change, not click. */
+  document.addEventListener('change', e=>{
+    if(!e.target.classList || !e.target.classList.contains('cl-box')) return;
+    const li = e.target.closest('li.cl-item');
+    if(li) setItem(li, e.target.checked);
+  });
+
+  /* Clearing everything is destructive and one tap is too easy, so ask twice. */
+  const resetBtn = document.getElementById('clReset');
+  let armed = null;
+  function disarm(){
+    if(armed){ clearTimeout(armed); armed = null; }
+    if(resetBtn){ resetBtn.classList.remove('armed'); resetBtn.textContent = 'Clear all checkmarks'; }
+  }
+  if(resetBtn){
+    resetBtn.addEventListener('click', ()=>{
+      if(!armed){
+        resetBtn.classList.add('armed');
+        resetBtn.textContent = 'Tap again to clear';
+        armed = setTimeout(disarm, 4000);
+        return;
+      }
+      disarm();
+      state = {};
+      save();
+      document.querySelectorAll('.cl-box').forEach(b=>{ b.checked = false; });
+      document.querySelectorAll('li.cl-done').forEach(li=> li.classList.remove('cl-done'));
+      refresh();
+    });
+  }
+
+  refresh();
+})();
 
 const tabsEl = document.getElementById('dayTabs');
 const cardsEl = document.getElementById('dayCards');
