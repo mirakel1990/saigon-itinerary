@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Personal trip page on a public host: keep it out of search results and caches.
+     Deliberately no robots.txt Disallow, that would stop crawlers fetching the page
+     and they would never read this tag. -->
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, noimageindex">
+<meta name="referrer" content="no-referrer">
 <title>SGN, Sept 3-6</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
