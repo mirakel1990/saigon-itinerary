@@ -307,6 +307,10 @@
   .copy-value:hover{border-color:var(--seal);}
   .copy-value.copied{background:var(--leaf);border-color:var(--leaf);}
   .copy-value.copied::after{content:" (copied)";font-weight:700;}
+  .copy-inline{padding:0;background:none;border:0;border-bottom:1px dotted var(--seal);color:var(--seal);font-family:var(--font-mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;}
+  .copy-inline:hover{color:var(--ink);border-color:var(--ink);}
+  .copy-inline.copied{color:var(--leaf);border-color:var(--leaf);}
+  .copy-inline.copied::after{content:" \2713";}
 
   /* ---------- tickable checklists ----------
      The drawn ::before square is swapped for a real checkbox once JS upgrades the
@@ -351,6 +355,38 @@
   @media (prefers-reduced-motion:reduce){.panel.active{animation:none;}}
 
   .section-head h2{font-family:var(--font-display);font-style:italic;font-weight:700;font-size:28px;margin:0 0 14px 0;color:var(--cream);}
+
+  /* ---------- stay tab: label/value tables and numbered entry steps ---------- */
+  .info-table{width:100%;border-collapse:collapse;margin:2px 0 0 0;}
+  .info-table th{width:32%;padding:9px 14px 9px 0;text-align:left;vertical-align:top;font-family:var(--font-mono);font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--seal);}
+  .info-table td{padding:9px 0;vertical-align:top;font-size:13px;line-height:1.5;color:var(--muted-ink);}
+  .info-table tr + tr th, .info-table tr + tr td{border-top:1px solid rgba(36,53,43,0.12);}
+  .info-table strong{color:var(--ink);}
+  .info-table code{font-family:var(--font-mono);font-size:12.5px;color:var(--ink);background:var(--paper);border-radius:3px;padding:1px 5px;}
+
+  .steps{list-style:none;counter-reset:step;margin:4px 0 0 0;padding:0;}
+  .steps li{position:relative;counter-increment:step;margin:0;padding:0 0 16px 38px;font-size:13px;line-height:1.5;color:var(--muted-ink);}
+  .steps li::before{content:counter(step);position:absolute;left:0;top:-2px;display:grid;place-items:center;width:26px;height:26px;border-radius:999px;background:var(--jade);color:var(--cream);font-family:var(--font-mono);font-size:11px;font-weight:700;}
+  .steps li::after{content:"";position:absolute;left:12px;top:26px;bottom:0;width:1px;background-image:repeating-linear-gradient(180deg,rgba(36,53,43,0.32) 0 4px,transparent 4px 8px);}
+  .steps li:last-child{padding-bottom:0;}
+  .steps li:last-child::after{display:none;}
+  .steps strong{color:var(--ink);}
+  .steps .step-note{display:block;margin-top:3px;font-size:11.5px;color:var(--seal);}
+
+  .stay-actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 2px 0;}
+  .stay-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid rgba(36,53,43,0.22);border-radius:999px;background:var(--paper);color:var(--ink);font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;transition:background .18s ease, border-color .18s ease;}
+  .stay-btn svg{width:15px;height:15px;flex:0 0 auto;stroke:var(--seal);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .stay-btn:hover{background:var(--cream);border-color:var(--seal);}
+  .stay-btn-key{background:var(--seal);border-color:var(--seal);color:var(--cream);}
+  .stay-btn-key svg{stroke:var(--cream);}
+  .stay-btn-key:hover{background:var(--ink);border-color:var(--ink);}
+  /* .host-note a (0,2,0) outranks .stay-btn (0,1,0) and would paint the label
+     seal-on-seal, so the button colours need to win on specificity. */
+  .host-note a.stay-btn{color:var(--ink);font-weight:600;}
+  .host-note a.stay-btn-key{color:var(--cream);}
+
+  .stay-flag{margin:14px 0 0 0;padding:10px 12px;border-left:3px solid var(--gold);background:var(--paper);border-radius:0 5px 5px 0;font-size:12.5px;line-height:1.5;color:var(--muted-ink);}
+  .stay-flag strong{color:var(--ink);}
 
   /* ---------- phone layout ----------
      Compact header, one-row day chips, roomier alerts. Placed last so it wins
@@ -403,6 +439,20 @@
 
     .predep-tab{min-width:calc(50% - 3px);}
     .section-head h2{font-size:24px;}
+
+    /* Five tabs on a 375px phone: trim the label so nothing truncates. */
+    .tabbar-btn{padding:8px 1px 7px;font-size:8.5px;letter-spacing:.02em;}
+    .tabbar-btn svg{width:20px;height:20px;}
+
+    /* Label above value beats two cramped columns at this width. */
+    .info-table, .info-table tbody, .info-table tr, .info-table th, .info-table td{display:block;width:auto;}
+    .info-table tr{padding:9px 0;border-top:1px solid rgba(36,53,43,0.12);}
+    .info-table tr:first-child{padding-top:2px;border-top:0;}
+    .info-table th{padding:0 0 3px 0;}
+    .info-table td{padding:0;}
+    .info-table tr + tr th, .info-table tr + tr td{border-top:0;}
+    .steps li{padding-left:34px;font-size:12.5px;}
+    .stay-btn{font-size:10px;padding:9px 11px;}
     .logistics{padding-bottom:24px;}
     .postmark{display:none;}
   }
@@ -489,6 +539,10 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="M7.5 14h.01M7.5 17.5h.01M11 14h6M11 17.5h4"/></svg>
       <span>Itinerary</span>
     </button>
+    <button class="tabbar-btn" id="tab-stay" role="tab" aria-selected="false" aria-controls="panel-stay" data-section="stay">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.8V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.8"/><path d="M9.5 21v-6h5v6"/></svg>
+      <span>Stay</span>
+    </button>
     <button class="tabbar-btn" id="tab-postcards" role="tab" aria-selected="false" aria-controls="panel-postcards" data-section="postcards">
       <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="10" r="1.5"/><path d="m2.5 17.5 5-5 4.5 4.5L16 13.5l5.5 5"/></svg>
       <span>Postcards</span>
@@ -533,41 +587,6 @@
       <p><strong>Vietnam's separate health declaration:</strong> disputed. A decree allows it from Jul 1, 2026, but Vietnam's Ministry of Health says it is not currently enforced. Worth a quick check of prearrival.immigration.gov.vn or with VietJet a day or two before Sep 3.</p>
     </div>
 
-    <div class="host-note">
-      <div class="host-note-head">
-        <div class="alert-badge">From your host</div>
-        <h3>Airport to the Airbnb</h3>
-      </div>
-      <p>Two Urban Resort locations exist, always confirm the exact address, not just "Urban Resort." The unit is in the alley, right-hand side.</p>
-      <ul class="check-list compact" data-cl="host-pin">
-        <li><a href="https://maps.app.goo.gl/3vpVDUQJ3PNvHirU9" target="_blank" rel="noopener">Open the host's Google Maps pin</a> to navigate straight there</li>
-      </ul>
-      <div class="copy-box">
-        <div class="copy-label">Tap to copy, paste into Grab's search or show a taxi driver</div>
-        <div class="copy-value" onclick="navigator.clipboard&amp;&amp;navigator.clipboard.writeText(this.dataset.copy);this.classList.add('copied');setTimeout(()=&gt;this.classList.remove('copied'),1200);" data-copy="18A/6 Nguyen Thi Minh Khai, phuong Sai Gon, Thanh pho Ho Chi Minh">18A/6 Nguyen Thi Minh Khai, phuong Sai Gon, Thanh pho Ho Chi Minh</div>
-        <div class="host-note-old">Formerly phuong Da Kao, Quan 1, same place, ward names merged in 2025. No public Grab pin-link exists, so copy this into the app's search box instead.</div>
-      </div>
-
-      <div class="host-note-grid">
-        <div>
-          <div class="checklist-heading">Taxi</div>
-          <p class="host-note-fact">Vinasun or Mai Linh only, 30 to 60 min, meter fare 150k to 250k VND.</p>
-          <ul class="check-list compact" data-cl="taxi">
-            <li>Insist the meter is on, never prepay</li>
-            <li>Overcharged? Photo the plate, tell your host</li>
-          </ul>
-        </div>
-        <div>
-          <div class="checklist-heading">Grab</div>
-          <p class="host-note-fact">Pickup at both terminals, International is Lane B, Pillar 10.</p>
-          <ul class="check-list compact" data-cl="grab">
-            <li>Paste the copied address above into the app</li>
-          </ul>
-        </div>
-      </div>
-      <p class="alert-warn">Send your host a photo of your entry stamp after immigration, even without a visa.</p>
-    </div>
-
     <div class="predep-tabs" id="predepTabs"></div>
     <div id="predepCards"></div>
     <div class="cl-reset-row"><button type="button" class="cl-reset" id="clReset" hidden>Clear all checkmarks</button></div>
@@ -579,7 +598,7 @@
   <div class="logistics reveal">
     <div class="note-paper">
       <div class="note-heading">Luggage</div>
-      <p>Confirmed: the Airbnb has a <strong>ground floor luggage area</strong>, drop bags there before check-in and after checkout.</p>
+      <p>The Airbnb has a <strong>ground floor luggage area</strong> for before check-in and after checkout. The host asks you to <strong>let them know in advance</strong>.</p>
       <p>Backup if it's ever full: <strong>Jackey's House</strong>, same street (Nguyen Thi Minh Khai). Safe, English-speaking, walk-in.</p>
     </div>
     <div class="note-paper">
@@ -599,6 +618,134 @@
   <section class="panel active" id="panel-itinerary" role="tabpanel" aria-labelledby="tab-itinerary" tabindex="0">
     <div class="day-tabs" id="dayTabs"></div>
     <div id="dayCards"></div>
+  </section>
+
+  <section class="panel" id="panel-stay" role="tabpanel" aria-labelledby="tab-stay" tabindex="0">
+    <div class="predeparture reveal">
+      <h2>Where you're staying</h2>
+      <p><strong>CLOUD 4</strong>, 4th floor, in the alley off 18A Nguyen Thi Minh Khai. Everything the host sent, sorted.</p>
+
+      <div class="host-note">
+        <div class="host-note-head">
+          <div class="alert-badge">Start here</div>
+          <h3>Getting in the door</h3>
+        </div>
+        <p>Two Urban Resort locations exist, always confirm the exact address, not just "Urban Resort." The unit is in the alley, right-hand side.</p>
+        <div class="stay-actions">
+          <a class="stay-btn stay-btn-key" href="https://www.youtube.com/shorts/zsywBcWu6jM" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 8 6 4-6 4V8Z"/><rect x="2" y="4" width="20" height="16" rx="3"/></svg>
+            Watch the walkthrough
+          </a>
+          <a class="stay-btn" href="https://maps.app.goo.gl/3vpVDUQJ3PNvHirU9" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10.2c0 5.3-8 11.8-8 11.8s-8-6.5-8-11.8a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            Host's map pin
+          </a>
+        </div>
+
+        <div class="copy-box">
+          <div class="copy-label">Tap to copy, paste into Grab's search or show a taxi driver</div>
+          <div class="copy-value" data-copy="18A/6 Nguyen Thi Minh Khai, phuong Sai Gon, Thanh pho Ho Chi Minh">18A/6 Nguyen Thi Minh Khai, phuong Sai Gon, Thanh pho Ho Chi Minh</div>
+          <div class="host-note-old">Formerly phuong Da Kao, Quan 1, same place, ward names merged in 2025. No public Grab pin-link exists, so copy this into the app's search box instead.</div>
+        </div>
+
+        <ol class="steps">
+          <li>Find the alley at <strong>18A Nguyen Thi Minh Khai</strong>. The building is on the <strong>right-hand side</strong>.</li>
+          <li>At the front there is a <strong>glass door with a keypad</strong>. Enter the passcode.<span class="step-note">The host sends this in a separate message. It is deliberately not on this page.</span></li>
+          <li>Take the <strong>stairs</strong> up to the 1st floor. The lift does not serve the ground floor.</li>
+          <li>From the 1st floor, take the <strong>lift to the 4th</strong>. Building is ground floor plus 6 upper floors.</li>
+          <li><strong>CLOUD 4</strong> is directly across from the lift, signed on the door. <strong>Same code</strong> as the front door.</li>
+        </ol>
+      </div>
+
+      <div class="host-note">
+        <div class="host-note-head">
+          <div class="alert-badge">At a glance</div>
+          <h3>The unit</h3>
+        </div>
+        <table class="info-table">
+          <tr><th scope="row">Room</th><td><strong>CLOUD 4</strong>, 4th floor, across from the lift</td></tr>
+          <tr><th scope="row">Wifi network</th><td><code>CIRCADIAN CLOUD 4A</code></td></tr>
+          <tr><th scope="row">Wifi password</th><td><code>suonbicha</code> &nbsp;<button type="button" class="copy-inline" data-copy="suonbicha">copy</button></td></tr>
+          <tr><th scope="row">Door code</th><td>One code opens both the building and the room. Sent by the host separately.</td></tr>
+          <tr><th scope="row">Check-in</th><td><strong>2:00 PM</strong>, earlier only if the host has confirmed it</td></tr>
+          <tr><th scope="row">Checkout</th><td><strong>12:00 PM</strong></td></tr>
+          <tr><th scope="row">Quiet hours</th><td><strong>9:00 PM to 9:00 AM</strong></td></tr>
+          <tr><th scope="row">Building</th><td>Ground floor plus 6 upper floors, stairs and lift</td></tr>
+          <tr><th scope="row">House manual</th><td>Inside the unit, more detail there</td></tr>
+        </table>
+        <div class="stay-flag"><strong>Worth planning for:</strong> your Thu and Fri shifts run 7PM to 5AM, which sits almost entirely inside the 9PM to 9AM quiet hours. Headphones and a soft keyboard, and take calls quietly.</div>
+      </div>
+
+      <div class="host-note">
+        <div class="host-note-head">
+          <div class="alert-badge">House rules</div>
+          <h3>Three things to remember</h3>
+        </div>
+        <table class="info-table">
+          <tr><th scope="row">No smoking</th><td>Not in the unit, not anywhere in the building. <strong>Smoke detectors are installed.</strong></td></tr>
+          <tr><th scope="row">Shoes off</th><td>Remove them when you enter the apartment</td></tr>
+          <tr><th scope="row">Quiet hours</th><td>9:00 PM to 9:00 AM</td></tr>
+        </table>
+      </div>
+
+      <div class="host-note">
+        <div class="host-note-head">
+          <div class="alert-badge">Facilities</div>
+          <h3>Laundry, trash, water, bags, parking</h3>
+        </div>
+        <table class="info-table">
+          <tr><th scope="row">Laundry</th><td>Washer in the room with <strong>free powder detergent</strong>, plus a drying rack. Clothes only, no shoes or non-clothing items.</td></tr>
+          <tr><th scope="row">Trash</th><td>Your bag goes in the large bin in the hallway</td></tr>
+          <tr><th scope="row">Drinking water</th><td>The <strong>small kitchen faucet</strong> is drinkable</td></tr>
+          <tr><th scope="row">Luggage</th><td>Ground floor storage before check-in and after checkout. <strong>Tell the host in advance.</strong></td></tr>
+          <tr><th scope="row">Parking</th><td>Hoa Lu Stadium, No. 2 Dinh Tien Hoang, Da Kao ward, District 1. Self-paid. <button type="button" class="copy-inline" data-copy="Hoa Lu Stadium, 2 Dinh Tien Hoang, Da Kao, District 1, Ho Chi Minh City">copy address</button></td></tr>
+        </table>
+      </div>
+
+      <div class="host-note">
+        <div class="host-note-head">
+          <div class="alert-badge">Cohosts</div>
+          <h3>Reaching someone</h3>
+        </div>
+        <p>The cohost team handles requests and questions. The hotline is the fastest route for anything urgent, like the keypad not opening at 4:35 AM.</p>
+        <div class="stay-actions">
+          <a class="stay-btn stay-btn-key" href="tel:+84393901901">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3h3l1.5 4.5-2 1.4a12.5 12.5 0 0 0 6.1 6.1l1.4-2L21 14.5v3a2 2 0 0 1-2.2 2A16.8 16.8 0 0 1 4 5.2 2 2 0 0 1 6 3Z"/></svg>
+            Call +84 393 901 901
+          </a>
+          <a class="stay-btn" href="https://wa.me/84393901901" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.7-5.2A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+            WhatsApp
+          </a>
+        </div>
+        <p class="host-note-fact" style="margin-top:12px;">Also on <strong>Zalo</strong>, <strong>Line</strong>, <strong>FB Messenger</strong> and other messaging apps, on the same number.</p>
+        <p class="alert-warn">Send your host a photo of your entry stamp after immigration, even without a visa.</p>
+      </div>
+
+      <div class="host-note">
+        <div class="host-note-head">
+          <div class="alert-badge">From the airport</div>
+          <h3>Taxi or Grab</h3>
+        </div>
+        <div class="host-note-grid">
+          <div>
+            <div class="checklist-heading">Taxi</div>
+            <p class="host-note-fact">Vinasun or Mai Linh only, 30 to 60 min, meter fare 150k to 250k VND.</p>
+            <ul class="check-list compact" data-cl="taxi">
+              <li>Insist the meter is on, never prepay</li>
+              <li>Overcharged? Photo the plate, tell your host</li>
+            </ul>
+          </div>
+          <div>
+            <div class="checklist-heading">Grab</div>
+            <p class="host-note-fact">Pickup at both terminals, International is Lane B, Pillar 10.</p>
+            <ul class="check-list compact" data-cl="grab">
+              <li>Paste the copied address above into the app</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="panel" id="panel-postcards" role="tabpanel" aria-labelledby="tab-postcards" tabindex="0">
@@ -664,6 +811,34 @@ function bookingLinkRow(url){
   return `<div class="link-row"><a href="${url}" target="_blank" rel="noopener">View on Airbnb</a></div>`;
 }
 
+/* ============ TAP TO COPY ============
+   Delegated, so it covers the address, wifi password and parking address alike. */
+document.addEventListener('click', e=>{
+  const el = e.target.closest && e.target.closest('[data-copy]');
+  if(!el) return;
+  e.preventDefault();
+  const text = el.dataset.copy;
+  const flash = ()=>{ el.classList.add('copied'); setTimeout(()=> el.classList.remove('copied'), 1400); };
+  /* The clipboard API needs a secure context, so keep the old textarea path
+     for anyone opening this over plain http or from a local file. */
+  const fallback = ()=>{
+    try{
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly','');
+      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      flash();
+    }catch(err){}
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(flash, fallback);
+  } else { fallback(); }
+});
+
 /* ============ HERO TICKET, stay details toggle ============ */
 (function(){
   const btn = document.getElementById('ticketToggle');
@@ -685,7 +860,7 @@ function bookingLinkRow(url){
 
 /* ============ SECTION TABS ============
    Wired before anything else so the nav still works if the map CDN fails. */
-const SECTIONS = ['checklist','itinerary','postcards','map'];
+const SECTIONS = ['checklist','itinerary','stay','postcards','map'];
 const DEFAULT_SECTION = 'itinerary';
 var mapInstance = null;   /* var, not const: read by selectSection before Leaflet runs */
 
@@ -698,13 +873,22 @@ function sectionFromHash(){
    nothing to report. On switch, un-hide whatever is already in view and leave the
    rest to cascade in on scroll as usual. */
 function revealPanel(panel){
-  requestAnimationFrame(()=>{
-    const h = window.innerHeight || 800;
-    panel.querySelectorAll('.reveal').forEach(el=>{
-      if(el.getBoundingClientRect().top < h * 1.05) el.classList.add('in');
-    });
+  if(!panel) return;
+  /* Synchronous on purpose. requestAnimationFrame is paused while the tab is
+     in the background, which would leave a panel opened in a background tab
+     stuck at opacity 0. The caller has already forced a reflow. */
+  const h = window.innerHeight || 800;
+  panel.querySelectorAll('.reveal').forEach(el=>{
+    if(el.getBoundingClientRect().top < h * 1.05) el.classList.add('in');
   });
 }
+
+/* Safety net for a page laid out while hidden: the scroll observer's 8%
+   threshold can miss a tall card that is only slightly in view, so re-check
+   the moment the page is actually looked at. */
+document.addEventListener('visibilitychange', ()=>{
+  if(!document.hidden) revealPanel(document.querySelector('.panel.active'));
+});
 
 function selectSection(id, opts){
   const o = opts || {};
@@ -770,7 +954,7 @@ const days = [
         {name:'Dinh Bread & Tea', cat:'food', note:'Small, family-run banh mi spot, worth the short ride.', lat:10.7635, lng:106.6911, pid:'ChIJUYIRGAAvdTER-NpSsWvjIQE'},
         {name:'The Vagabond Patisserie', cat:'dessert', note:'4.7 stars, close to the Airbnb, excellent croissants and cakes if you want something sweet with coffee.', lat:10.7848, lng:106.6982, pid:'ChIJA63tdc0odTERulUJgBZZWKo'},
       ]},
-      {type:'fixed', time:'7:30 AM', name:'Luggage drop: ground floor of the Airbnb', cat:'travel', note:"Confirmed luggage area on site, no need to message ahead. Jackey's House on the same street is the backup if it's ever full.", lat:10.7859, lng:106.7007},
+      {type:'fixed', time:'7:30 AM', name:'Luggage drop: ground floor of the Airbnb', cat:'travel', note:"Ground floor luggage area on site, but the host asks for advance notice, so message them the day before. Jackey's House on the same street is the backup if it's ever full.", lat:10.7859, lng:106.7007},
       {type:'fixed', time:'8:00 AM', name:'VPBank Hang Xanh, ATM', cat:'atm', note:'Closest zero-fee ATM to the Airbnb, confirmed no fee for foreign cards in reviews. Weekday hours only, closed Sunday.', lat:10.7907, lng:106.6980, pid:'ChIJkUWHAGwvdTERdbFJrOLHuC4'},
       {type:'choice', time:'2:30 PM', title:'Easy afternoon, treat yourself', sub:'Jet lag recovery: two well-reviewed spas plus a cafe, all under 20 min.', options:[
         {name:'AMOR Spa', cat:'sight', note:'4.9 stars, herbal head spa tucked inside a restaurant in Tan Dinh, basically walking distance, popular with foreign visitors. Order the herbal hair wash and shoulder massage.', lat:10.7930, lng:106.6882, pid:'ChIJbX83I1kpdTERKQboKBvJX1c'},
@@ -873,7 +1057,7 @@ const days = [
         {name:'Che me den', cat:'dessert', note:'Tiny, eclectic black sesame dessert shop, genuinely local.', lat:10.7682, lng:106.6987, pid:'ChIJWarR6D8vdTER0nCKPAFy2JM'},
         {name:'Forest Spa', cat:'sight', note:'Massage and hair-wash spa, a few minutes from the Pink Church, good if the group wants to unwind.', lat:10.7900, lng:106.6977, pid:'ChIJSQ5EYdopdTERt-8lULKMa_s'},
       ]},
-      {type:'fixed', time:'12:00 PM', name:'Checkout and luggage drop', cat:'travel', note:'Bags go to the ground floor luggage area, confirmed with the host, no need to ask again.', lat:10.7859, lng:106.7007},
+      {type:'fixed', time:'12:00 PM', name:'Checkout and luggage drop', cat:'travel', note:'Bags go to the ground floor luggage area. Message the host in advance so it is arranged before you check out.', lat:10.7859, lng:106.7007},
       {type:'choice', time:'2:00 PM', title:'Afternoon, pick one', sub:'A full window before dinner, no rush.', options:[
         {name:'Bitexco Skydeck', cat:'sight', note:'49th floor, 360 degree view, best around 5 to 7pm if you push it later.', lat:10.7716, lng:106.7042, pid:'ChIJVZKCP0EvdTERfHvs6AfGjok'},
         {name:'Saigon Waterbus', cat:'sight', note:'Cheap river cruise, Bach Dang to Thao Dien and back, lovely around golden hour.', lat:10.7753, lng:106.7069, pid:'ChIJbQ1WPXPQmk0RX5xHYDH-V0M'},
